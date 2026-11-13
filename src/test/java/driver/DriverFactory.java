@@ -32,11 +32,39 @@ public class DriverFactory {
                 System.getProperty("LT_BUILD_NAME");
         
 
-        if(executionTarget.equalsIgnoreCase("local")) {
+      /*  if(executionTarget.equalsIgnoreCase("local")) {
 
             System.out.println("Ejecución LOCAL");
 
             return new ChromeDriver();
+        }*/
+        
+        if(executionTarget.equalsIgnoreCase("local")) {
+
+            System.out.println("Ejecución LOCAL");
+
+            ChromeOptions options =
+                    new ChromeOptions();
+
+            if(System.getenv("GITHUB_ACTIONS") != null) {
+
+                System.out.println(
+                        "Ejecución GitHub Actions");
+
+                options.addArguments(
+                        "--headless=new");
+
+                options.addArguments(
+                        "--no-sandbox");
+
+                options.addArguments(
+                        "--disable-dev-shm-usage");
+
+                options.addArguments(
+                        "--window-size=1920,1080");
+            }
+
+            return new ChromeDriver(options);
         }
 
         
