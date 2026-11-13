@@ -1,5 +1,6 @@
 package tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -16,62 +17,79 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class QuitarProductoTest {
 
-    @Test
-    
-    public void POC_W006_Quitar_Producto()
-            throws Exception {
+	@Test
+	public void POC_W006_Quitar_Producto()
+	        throws Exception {
 
-        WebDriver driver = null;
+	    WebDriver driver = null;
 
-        try {
+	    try {
 
-            driver =
-                    DriverFactory.getDriver();
+	        driver = DriverFactory.getDriver();
 
-            driver.get(
-                    "https://www.saucedemo.com");
+	        driver.get("https://www.saucedemo.com");
 
-            LoginPage login =
-                    new LoginPage(driver);
+	        LoginPage login =
+	                new LoginPage(driver);
 
-            login.loginValido();
+	        login.loginValido();
 
-            WebDriverWait wait =
-                    new WebDriverWait(
-                            driver,
-                            Duration.ofSeconds(10));
+	        WebDriverWait wait =
+	                new WebDriverWait(
+	                        driver,
+	                        Duration.ofSeconds(10));
 
-            wait.until(
-                    ExpectedConditions
-                            .elementToBeClickable(
-                                    By.id(
-                               "add-to-cart-sauce-labs-backpack")))
-                    .click();
+	        wait.until(
+	                ExpectedConditions
+	                        .elementToBeClickable(
+	                                By.id(
+	                                        "add-to-cart-sauce-labs-backpack")))
+	                .click();
 
-            wait.until(
-                    ExpectedConditions
-                            .elementToBeClickable(
-                                    By.id(
-                               "remove-sauce-labs-backpack")))
-                    .click();
+	        wait.until(
+	                ExpectedConditions
+	                        .elementToBeClickable(
+	                                By.id(
+	                                        "remove-sauce-labs-backpack")))
+	                .click();
 
-            boolean existeBadge =
-                    driver.findElements(
-                            By.className(
-                                    "shopping_cart_badge"))
-                            .isEmpty();
+	        String textoBoton =
+	                wait.until(
+	                        ExpectedConditions
+	                                .visibilityOfElementLocated(
+	                                        By.id(
+	                                                "add-to-cart-sauce-labs-backpack")))
+	                .getText();
 
-            assertTrue(existeBadge);
+	        System.out.println(
+	                "Texto botón: "
+	                        + textoBoton);
 
-            EvidenceManager.saveResult(
-                    "POC-W006.txt",
-                    "Producto eliminado");
+	        assertEquals(
+	                "Add to cart",
+	                textoBoton);
 
-        } finally {
+	        EvidenceManager.saveResult(
+	                "POC-W006.txt",
+	                "Producto eliminado correctamente");
 
-            if(driver != null) {
-                driver.quit();
-            }
-        }
-    }
+	    } catch (Exception e) {
+
+	        if(driver != null) {
+	            EvidenceManager.saveScreenshot(driver);
+	        }
+
+	        EvidenceManager.saveResult(
+	                "POC-W006.txt",
+	                "ERROR: " + e.getMessage());
+
+	        throw e;
+
+	    } finally {
+
+	        if(driver != null) {
+	            driver.quit();
+	        }
+	    }
+	}
 }
