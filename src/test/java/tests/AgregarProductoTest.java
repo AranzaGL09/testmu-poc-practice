@@ -16,36 +16,58 @@ public class AgregarProductoTest {
     public void POC_W005_Agregar_Producto()
             throws Exception {
 
-        WebDriver driver =
-                DriverFactory.getDriver();
+        WebDriver driver = null;
 
-        driver.get(
-                "https://www.saucedemo.com");
+        try {
 
-        LoginPage login =
-                new LoginPage(driver);
+            driver = DriverFactory.getDriver();
 
-        login.loginValido();
+            driver.get("https://www.saucedemo.com");
 
-        driver.findElement(
-                By.id(
-                        "add-to-cart-sauce-labs-backpack"))
-                .click();
+            LoginPage login =
+                    new LoginPage(driver);
 
-        String badge =
-                driver.findElement(
-                        By.className(
-                                "shopping_cart_badge"))
-                        .getText();
+            login.loginValido();
 
-        assertEquals(
-                "1",
-                badge);
+            driver.findElement(
+                    By.id(
+                            "add-to-cart-sauce-labs-backpack"))
+                    .click();
 
-        EvidenceManager.saveResult(
-                "POC-W005.txt",
-                "Producto agregado");
+            String badge =
+                    driver.findElement(
+                            By.className(
+                                    "shopping_cart_badge"))
+                            .getText();
 
-        driver.quit();
+            assertEquals(
+                    "1",
+                    badge);
+
+            EvidenceManager.saveResult(
+                    "POC-W005.txt",
+                    "Producto agregado");
+
+        } catch (Exception e) {
+
+            if (driver != null) {
+
+                EvidenceManager.saveScreenshot(
+                        driver,
+                        "POC-W005.png");
+            }
+
+            EvidenceManager.saveResult(
+                    "POC-W005.txt",
+                    "ERROR: " + e.getMessage());
+
+            throw e;
+
+        } finally {
+
+            if (driver != null) {
+                driver.quit();
+            }
+        }
     }
 }

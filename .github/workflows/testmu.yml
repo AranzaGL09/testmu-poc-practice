@@ -24,9 +24,6 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-
       - name: Verify Java
         run: java -version
 
@@ -34,7 +31,13 @@ jobs:
         run: mvn -version
 
       - name: Execute Tests
-        run: mvn test
+        run: |
+          mvn test \
+          -DEXECUTION_TARGET=testmu \
+          -DLT_USERNAME=${{ secrets.LT_USERNAME }} \
+          -DLT_ACCESS_KEY=${{ secrets.LT_ACCESS_KEY }} \
+          -DLT_PROJECT=testmu-poc-practice \
+          -DLT_BUILD_NAME=GitHub-Build
 
       - name: Upload Reports
         if: always()

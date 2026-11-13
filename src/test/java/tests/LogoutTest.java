@@ -15,34 +15,57 @@ public class LogoutTest {
     @Test
     public void POC_W004_Logout() throws Exception {
 
-        WebDriver driver =
-                DriverFactory.getDriver();
+        WebDriver driver = null;
 
-        driver.get("https://www.saucedemo.com");
+        try {
 
-        LoginPage login =
-                new LoginPage(driver);
+            driver = DriverFactory.getDriver();
 
-        login.loginValido();
+            driver.get("https://www.saucedemo.com");
 
-        driver.findElement(
-                By.id("react-burger-menu-btn"))
-                .click();
+            LoginPage login =
+                    new LoginPage(driver);
 
-        Thread.sleep(1000);
+            login.loginValido();
 
-        driver.findElement(
-                By.id("logout_sidebar_link"))
-                .click();
+            driver.findElement(
+                    By.id("react-burger-menu-btn"))
+                    .click();
 
-        assertTrue(
-                driver.getCurrentUrl()
-                      .contains("saucedemo"));
+            Thread.sleep(1000);
 
-        EvidenceManager.saveResult(
-                "POC-W004.txt",
-                "Logout exitoso");
+            driver.findElement(
+                    By.id("logout_sidebar_link"))
+                    .click();
 
-        driver.quit();
+            assertTrue(
+                    driver.getCurrentUrl()
+                          .contains("saucedemo"));
+
+            EvidenceManager.saveResult(
+                    "POC-W004.txt",
+                    "Logout exitoso");
+
+        } catch (Exception e) {
+
+            if (driver != null) {
+
+                EvidenceManager.saveScreenshot(
+                        driver,
+                        "POC-W004.png");
+            }
+
+            EvidenceManager.saveResult(
+                    "POC-W004.txt",
+                    "ERROR: " + e.getMessage());
+
+            throw e;
+
+        } finally {
+
+            if (driver != null) {
+                driver.quit();
+            }
+        }
     }
 }

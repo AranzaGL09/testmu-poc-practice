@@ -76,7 +76,7 @@ public class QuitarProductoTest {
 	    } catch (Exception e) {
 
 	        if(driver != null) {
-	            EvidenceManager.saveScreenshot(driver);
+	            EvidenceManager.saveScreenshot(driver, "POC-W006.png");
 	        }
 
 	        EvidenceManager.saveResult(

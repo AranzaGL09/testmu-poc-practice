@@ -23,13 +23,16 @@ public class LoginTest {
             driver =
                     DriverFactory.getDriver();
 
-            String sessionId =
-                    ((RemoteWebDriver) driver)
-                            .getSessionId()
-                            .toString();
+            if(driver instanceof RemoteWebDriver) {
 
-            EvidenceManager.saveSessionId(
-                    sessionId);
+                String sessionId =
+                        ((RemoteWebDriver) driver)
+                                .getSessionId()
+                                .toString();
+
+                EvidenceManager.saveSessionId(
+                        sessionId);
+            }
 
             driver.get(
                     "https://www.saucedemo.com");
@@ -63,7 +66,7 @@ public class LoginTest {
             if(driver != null) {
 
                 EvidenceManager.saveScreenshot(
-                        driver);
+                        driver, "POC-W001.png");
             }
 
             EvidenceManager.saveResult(

@@ -15,33 +15,56 @@ public class InventarioTest {
     @Test
     public void POC_W003_Ver_Inventario() throws Exception {
 
-        WebDriver driver =
-                DriverFactory.getDriver();
+        WebDriver driver = null;
 
-        driver.get("https://www.saucedemo.com");
+        try {
 
-        LoginPage login =
-                new LoginPage(driver);
+            driver = DriverFactory.getDriver();
 
-        login.loginValido();
+            driver.get("https://www.saucedemo.com");
 
-        int productos =
-                driver.findElements(
-                        By.className("inventory_item"))
-                      .size();
+            LoginPage login =
+                    new LoginPage(driver);
 
-        System.out.println(
-                "Productos encontrados: "
-                        + productos);
+            login.loginValido();
 
-        assertTrue(productos > 0);
+            int productos =
+                    driver.findElements(
+                            By.className("inventory_item"))
+                          .size();
 
-        EvidenceManager.saveResult(
-                "POC-W003.txt",
-                "Inventario visible: "
-                        + productos
-                        + " productos");
+            System.out.println(
+                    "Productos encontrados: "
+                            + productos);
 
-        driver.quit();
+            assertTrue(productos > 0);
+
+            EvidenceManager.saveResult(
+                    "POC-W003.txt",
+                    "Inventario visible: "
+                            + productos
+                            + " productos");
+
+        } catch (Exception e) {
+
+            if (driver != null) {
+
+                EvidenceManager.saveScreenshot(
+                        driver,
+                        "POC-W003.png");
+            }
+
+            EvidenceManager.saveResult(
+                    "POC-W003.txt",
+                    "ERROR: " + e.getMessage());
+
+            throw e;
+
+        } finally {
+
+            if (driver != null) {
+                driver.quit();
+            }
+        }
     }
 }

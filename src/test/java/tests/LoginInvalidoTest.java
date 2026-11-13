@@ -62,12 +62,13 @@ public class LoginInvalidoTest {
 	            if (driver != null) {
 
 	                EvidenceManager.saveScreenshot(
-	                        driver);
+	                        driver, "POC-W002.png");
 	            }
 
 	            throw e;
 
-	        } finally {
+	        } 
+	        finally {
 
 	            if (driver != null) {
 

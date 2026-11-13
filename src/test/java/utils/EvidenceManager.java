@@ -64,7 +64,8 @@ public class EvidenceManager {
     }
 
     public static void saveScreenshot(
-            WebDriver driver)
+    		WebDriver driver,
+    	    String fileName)
             throws Exception {
 
         createArtifactsFolder();
